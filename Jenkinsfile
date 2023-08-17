@@ -28,11 +28,21 @@ pipeline {
                 }
             }
         }
+        
+        stage('Stop and Remove Running Container') {
+            steps {
+                script {
+                    def dockerContainerName = "my-node-app"  // Set your container name here
+                    sh "docker stop $dockerContainerName || true"  // Stop and ignore errors if container is not running
+                    sh "docker rm $dockerContainerName || true"    // Remove and ignore errors if container does not exist
+                }
+            }
+        }
 
         stage('Run Docker Image') {
             steps {
                 script {
-                    def dockerRunCmd = "docker run -d -p 5000:5000 w3ll1n9t0n/test-jenkins:${env.RANDOM_BUILD_ID}"
+                    def dockerRunCmd = "docker run -d -p 5000:5000 --name my-node-app w3ll1n9t0n/test-jenkins:${env.RANDOM_BUILD_ID}"
                     sh dockerRunCmd
                 }
             }
