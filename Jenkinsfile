@@ -29,5 +29,15 @@ pipeline {
                 }
             }
         }
+        
+        stage('Run Docker Image') {
+            steps {
+                script {
+                    def randomBuildId = UUID.randomUUID().toString()
+                    def dockerRunCmd = "docker run -d -p 5000:5000 w3ll1n9t0n/test-jenkins:${randomBuildId}"
+                    sh dockerRunCmd
+                }
+            }
+        }
     }
 }
