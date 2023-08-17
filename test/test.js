@@ -5,6 +5,6 @@ describe('App', function() {
   it('has the default page', function(done) {
     request(app)
       .get('/')
-      .expect(/Welcome to Express-2023/, done);
+      .expect(/Welcome to Express-17/08/2023/, done);
   });
 }); 
