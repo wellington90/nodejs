@@ -28,5 +28,14 @@ pipeline {
                 }
             }
         }
+
+        stage('Run Docker Image') {
+            steps {
+                script {
+                    def dockerRunCmd = "docker run -d -p 5000:5000 w3ll1n9t0n/test-jenkins:${env.RANDOM_BUILD_ID}"
+                    sh dockerRunCmd
+                }
+            }
+        }
     }
 }
