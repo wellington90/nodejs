@@ -13,6 +13,7 @@ pipeline {
                 script {
                     def randomBuildId = UUID.randomUUID().toString()
                     def dockerapp = docker.build("w3ll1n9t0n/test-jenkins:${randomBuildId}")
+                    env.RANDOM_BUILD_ID = randomBuildId  // Store the variable in environment
                 }
             }
         }
@@ -20,14 +21,12 @@ pipeline {
         stage('Docker Push Image') {
             steps {
                 script {
-                    def randomBuildId = UUID.randomUUID().toString()
-                    def dockerapp = docker.build("w3ll1n9t0n/test-jenkins:${randomBuildId}")
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         dockerapp.push('latest')
-                        dockerapp.push("${randomBuildId}")
+                        dockerapp.push(env.RANDOM_BUILD_ID)
                     }
                 }
             }
         }
-        
-
+    }
+}
