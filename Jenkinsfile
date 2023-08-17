@@ -29,14 +29,7 @@ pipeline {
             }
         }
         
-        stage('Wait for 15 Seconds') {
-            steps {
-                script {
-                    sleep 15  // Wait for 15 seconds
-                }
-            }
-        }
-
+        
         stage('Run Docker Image') {
             steps {
                 script {
