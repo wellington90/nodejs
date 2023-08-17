@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    environment {
+        // Generate the random build ID
+        RANDOM_BUILD_ID = UUID.randomUUID().toString()
+        DOCKER_IMAGE_TAG = "w3ll1n9t0n/test-jenkins:${env.RANDOM_BUILD_ID}"
+    }
+
     stages {
         stage('Get Source') {
             steps {
@@ -11,9 +17,7 @@ pipeline {
         stage('Docker Build Image') {
             steps {
                 script {
-                    def randomBuildId = UUID.randomUUID().toString()
-                    def dockerapp = docker.build("w3ll1n9t0n/test-jenkins:${randomBuildId}")
-                    env.RANDOM_BUILD_ID = randomBuildId  // Store the variable in environment
+                    def dockerapp = docker.build(env.DOCKER_IMAGE_TAG)
                 }
             }
         }
@@ -29,11 +33,10 @@ pipeline {
             }
         }
         
-        
         stage('Run Docker Image') {
             steps {
                 script {
-                    def dockerRunCmd = "docker run -d -p 5000:5000 w3ll1n9t0n/test-jenkins:${env.RANDOM_BUILD_ID}"
+                    def dockerRunCmd = "docker run -d -p 5000:5000 ${env.DOCKER_IMAGE_TAG}"
                     sh dockerRunCmd
                 }
             }
