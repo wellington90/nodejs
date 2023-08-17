@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        // Generate the random build ID
-        RANDOM_BUILD_ID = UUID.randomUUID().toString()
-        DOCKER_IMAGE_TAG = "w3ll1n9t0n/test-jenkins:${env.RANDOM_BUILD_ID}"
-    }
-
     stages {
         stage('Get Source') {
             steps {
@@ -17,7 +11,8 @@ pipeline {
         stage('Docker Build Image') {
             steps {
                 script {
-                    def dockerapp = docker.build(env.DOCKER_IMAGE_TAG)
+                    def randomBuildId = UUID.randomUUID().toString()
+                    def dockerapp = docker.build("w3ll1n9t0n/test-jenkins:${randomBuildId}")
                 }
             }
         }
@@ -25,21 +20,14 @@ pipeline {
         stage('Docker Push Image') {
             steps {
                 script {
+                    def randomBuildId = UUID.randomUUID().toString()
+                    def dockerapp = docker.build("w3ll1n9t0n/test-jenkins:${randomBuildId}")
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         dockerapp.push('latest')
-                        dockerapp.push(env.RANDOM_BUILD_ID)
+                        dockerapp.push("${randomBuildId}")
                     }
                 }
             }
         }
         
-        stage('Run Docker Image') {
-            steps {
-                script {
-                    def dockerRunCmd = "docker run -d -p 5000:5000 ${env.DOCKER_IMAGE_TAG}"
-                    sh dockerRunCmd
-                }
-            }
-        }
-    }
-}
+
