@@ -11,8 +11,7 @@ pipeline {
         stage('Docker Build Image') {
             steps {
                 script {
-                    def dockerapp = docker.build("w3ll1n9t0n/test-jenkins:${env.BUILD_ID}", 
-                        "--file Dockerfile .")
+                    def dockerapp = docker.build("w3ll1n9t0n/test-jenkins:${env.BUILD_ID}")
                 }
             }
         }
