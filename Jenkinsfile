@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     def randomBuildId = UUID.randomUUID().toString()
-                    def dockerapp = docker.build("w3ll1n9t0n/test-jenkins:${randomBuildId}")
+                    dockerapp = docker.build("w3ll1n9t0n/test-jenkins:${randomBuildId}")
                     env.RANDOM_BUILD_ID = randomBuildId  // Store the variable in environment
                 }
             }
